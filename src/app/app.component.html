@@ -1,0 +1,40 @@
+<h1 class="mat-subheading-1">Wait for it... The api can be slow.</h1>
+
+<form [formGroup]="form">
+  <ng-container *ngIf="options$ | async as options">
+    <mat-form-field *ngIf="filteredOptions$ | async as filteredOptions">
+      <input
+        type="text"
+        placeholder="Select a Star Wars character"
+        matInput
+        [matAutocomplete]="auto"
+        formControlName="character"
+        #input
+        (keyup)="onAutocompleteKeyUp(input.value, options)"
+        required
+      />
+
+      <mat-error *ngIf="form.controls.character.errors?.matchRequired">
+        Please select a character from the list.
+      </mat-error>
+
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        autoActiveFirstOption
+        [displayWith]="getAutoCompleteDisplayValue"
+      >
+        <mat-option *ngFor="let option of filteredOptions" [value]="option">
+          {{ option.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </ng-container>
+</form>
+
+<h1 class="mat-title">Instructions for use</h1>
+<ul class="mat-body-1">
+  <li>Click in the Autocomplete, then click out (error)</li>
+  <li>Click in the Autocomplete, type "abc" (error)</li>
+  <li>Type "luke", click on "Luke Skywalker" (valid)</li>
+  <li>Start deleting characters off of the end of "Skywalker" and then click out (invalid)</li>
+</ul>
